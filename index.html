@@ -102,7 +102,12 @@ d3.csv("SS.csv", function(error, data) {
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .text("");
-<h5>U.S. Unemployment Rate, January 2005-July 2015 (with Animation)</h5>
+<div class="text-center">
+			<iframe scrolling="no" width="760" height="365" src="http://duspviz.mit.edu/d3-workshop/examples/session3/line-chart-unrolling.html"></iframe>
+			<div class="caption" style="text-align: center">
+				<h5>U.S. Unemployment Rate, January 2005-July 2015 (with Animation) - <small> Data source:<a href="http://data.bls.gov/timeseries/LNS14000000"> Bureau of Labor Statistics</a></small><br><small><a href="http://duspviz.mit.edu/d3-workshop/examples/session3/line-chart-unrolling.html">(Click here to view this example on its own.)</a></small></h5>
+			</div>
+
   // Start Animation on Click
   d3.select("#start").on("click", function() {
     var path = svg.append("path")
