@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    <title>Hellenic Severe Weather Database</title>
+
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+
+
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<link rel="stylesheet" href="leaflet.css"/>
+    <link rel="stylesheet" href="MarkerCluster.css"/>
+    <link rel="stylesheet" href="MarkerCluster.Default.css"/>
+    <link rel="stylesheet" href="jquery-ui.css"/>
+    <link rel="stylesheet" href="Leaflet Plugins/leaflet-search-master/src/leaflet-search.css" />
+
+
+
+
+
+    <script src="leaflet.js"></script>
+  	<script src="jquery-2.1.1.min.js"></script>
+    <script src="leaflet.markercluster.js"></script>
+    <script src="leaflet.ajax.min.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="leaflet.SliderControl.min.js"></script>
+    <script src="SliderControl.js"></script>
+    <script src="Leaflet Plugins/leaflet-search-master/src/leaflet-search.js"></script>
+
+
+
+
+
+
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+           height:700px
+
+         }
+
+        .info { text-align: left; padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; }
+        .info i{float: center}
+        .info h4 { margin: 0 0 5px; color: #777; }
+.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+
+
+</style>
+</head>
+<body>
+  <h1>Hellenic Severe Weather Phenomena</h1>
+
+  <div id='map'></div>
+  <div class='timeseries'></div>
+<script>
+var testlayer;
+var map = L.map('map', {
+minZoom: 5,
+maxZoom: 15,
+}).setView([37.962625,23.631119], 10);
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+
+
+    //Fetch some data from a GeoJSON file
+        $.getJSON("ExtremeEventsinGreece.geojson", function(data) {
+          var testlayer = L.geoJson(data  ,{
+              onEachFeature: function( feature, layer ){
+      layer.bindPopup( "<b>" + feature.properties.name +
+                "</strong><br/>" + "Date:" + feature.properties.Date +  "</strong><br/>" + " Lat: " + feature.properties.lat +
+              "</strong><br/>" + "Long:" + feature.properties.long + '<br />' +'Video:'  +"<a href='" +
+              feature.properties.video_url + "' target='_blank'>" + feature.properties.name + "</a>" + '<br />' + "Image:"  + "<a href='" +
+              feature.properties.image_url + "' target='_blank'>" + feature.properties.name + "</a>");
+
+            }
+          });
+
+          var sliderControl = L.control.sliderControl({
+              position: "topright",
+              layer: testlayer,
+              timeAttribute: "Date",
+              isEpoch: false,
+              range: true
+          });
+            //Make sure to add the slider to the map ;-)
+            map.addControl(sliderControl);
+
+            //sliderControl.options.markers.sort(function(a, b) {
+    //return (a.feature.properties.Date > b.feature.properties.Date);
+//});
+            //And initialize the slider
+            sliderControl.startSlider();
+        });
+
+
+        </script>
+    </body>
+
+    </html>
